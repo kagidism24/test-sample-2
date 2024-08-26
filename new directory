@@ -1,0 +1,67 @@
+#include <iostream>
+#include <unistd.h>    
+#include <sys/stat.h>  
+#include <string>
+#include <cstring>     
+
+using namespace std;
+
+void createDirectory() {
+    string dirName;
+    char cwd[1024];
+
+    cout << "Please enter the name for the new directory: ";
+    cin >> dirName;
+
+    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+        cout << "You are currently in: " << cwd << endl;
+    } else {
+        cerr << "Error: Unable to retrieve the current directory." << endl;
+        return;
+    }
+
+    if (dirName.empty()) {
+        cerr << "Error: Directory name cannot be empty." << endl;
+        return;
+    }
+
+    if (mkdir(dirName.c_str(), 0777) == 0) {
+        cout << "Success! The directory '" << dirName << "' has been created." << endl;
+    } else {
+        cerr << "Error: Could not create the directory '" << dirName << "'. " 
+             << strerror(errno) << endl;
+    }
+}
+
+int main() {
+    int choice;
+
+    while (true) {
+       
+        cout << "\n=== MAIN MENU ===" << endl;
+        cout << "1. Display List of Files (Feature not yet available)" << endl;
+        cout << "2. Create a New Directory" << endl;
+        cout << "3. Change the Working Directory (Feature not yet available)" << endl;
+        cout << "4. Exit" << endl;
+        cout << "Please enter your choice (1-4): ";
+        cin >> choice;
+
+       
+        switch (choice) {
+            case 2:
+                createDirectory();
+                break;
+            case 4:
+                cout << "Exiting the program. Goodbye!" << endl;
+                return 0;
+            default:
+                cout << "Invalid choice. Please select a valid option (1-4)." << endl;
+        }
+
+        cout << "Press Enter to return to the main menu...";
+        cin.ignore();  
+        cin.get();    
+    }
+
+    return 0;
+}
